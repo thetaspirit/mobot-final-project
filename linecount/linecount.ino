@@ -32,11 +32,6 @@ const int TRIG = 13;
 // Servo Pin
 const int SERVO_PIN = 11;
 
-// Threshold values for IR detection
-// Feel free to change these values if you find a better range to work with
-const int THRESHOLD_WHITE_BLACK = 450;
-const int THRESHOLD_OUTSIDE = 850;
-
 int linesCounted = 0;
 
 bool irState = false;
@@ -77,7 +72,9 @@ void loop()
       stop();
       servoSwivel();
       // note that there is a pause built into servoSwivel.
-    } else {
+    }
+    else
+    {
       forward(127); // resume driving if stopped.
     }
     irState = irCurrentState;
@@ -94,7 +91,7 @@ void loop()
     stop();
     done = true;
   }
-  
+
   delay(10);
 }
 

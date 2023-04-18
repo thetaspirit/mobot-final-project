@@ -1,0 +1,4 @@
+{
+    "board": "arduino:avr:uno",
+    "sketch": "drivetrain-calibration\\drivetrain-calibration.ino"
+}
