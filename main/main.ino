@@ -10,7 +10,6 @@
 
 // Edit on day of challenge
 const int numLine = 7;
-const int distVal = 12; // TODO calibrate this!!!
 
 // Define all of the pins used.  These are NOT up to us, but rather what Elegoo decided.  Don't change.
 // If your car doesn't function properly  with these pins, please double check your pin connections.
@@ -32,12 +31,6 @@ const int TRIG = 13;
 // Servo Pin
 const int SERVO_PIN = 11;
 
-int linesCounted = 0;
-
-bool irState = false;
-
-bool done = false;
-
 NewPing sonar(TRIG, ECHO, 30);
 Servo servo;
 
@@ -56,43 +49,38 @@ void setup()
   servo.attach(SERVO_PIN);
 
   servo.write(180);
-  delay(250);
 
   Serial.begin(9600);
 }
 
 void loop()
 {
-  bool irCurrentState = lineDetected();
-  if (numLine - linesCounted > 0)
-  {
-    if (!irState && irCurrentState)
-    {
-      linesCounted++;
-      stop();
-      servoSwivel();
-      // note that there is a pause built into servoSwivel.
-    }
-    else
-    {
-      forward(127); // resume driving if stopped.
-    }
-    irState = irCurrentState;
-  }
-  else // we've passed enough lines
-  {
-    stop();
-    delay(3000);
-    servo.write(90);
-    while (getDistance() > distVal && !done)
-    {
-      forward(90);
-    }
-    stop();
-    done = true;
-  }
+  // Serial.print(analogRead(LEFT)); Serial.print(" ");
+  // Serial.print(analogRead(MIDDLE)); Serial.print(" ");
+  // Serial.println(analogRead(RIGHT));
 
-  delay(10);
+  driveUntilLines(numLine);
+
+  turnLeft();
+  
+  forward(64);
+  delay(250);
+  
+  while (getDistance() < 20)
+  {
+    forward(64);
+  }
+  stop();
+  
+  forward(64);
+  delay(500);
+  stop();
+
+  turnRight();
+  
+  while (true) {
+    stop();
+  }
 }
 
 bool lineDetected()
@@ -118,14 +106,51 @@ void stop()
   forward(0);
 }
 
-void servoSwivel()
+void turnRight()
 {
-  servo.write(0);
-  delay(250);
-  servo.write(180);
+  digitalWrite(MOTOR_OUTPUT, HIGH);
+  digitalWrite(LEFT_MOTOR_DIR, HIGH);
+  digitalWrite(RIGHT_MOTOR_DIR, LOW);
+  analogWrite(LEFT_MOTORS, 127);
+  analogWrite(RIGHT_MOTORS, 127);
+
+  delay(500);
+  stop();
+}
+
+void turnLeft()
+{
+  digitalWrite(MOTOR_OUTPUT, HIGH);
+  digitalWrite(LEFT_MOTOR_DIR, LOW);
+  digitalWrite(RIGHT_MOTOR_DIR, HIGH);
+  analogWrite(LEFT_MOTORS, 127);
+  analogWrite(RIGHT_MOTORS, 127);
+
+  delay(500);
+  stop();
 }
 
 unsigned long getDistance()
 {
   return sonar.ping_cm() - 1;
+}
+
+void driveUntilLines(int lines)
+{
+  int linesCounted = 0;
+  bool irPrevState = false;
+  bool irCurrentState = false;
+
+  forward(64);
+  while (lines - linesCounted > 0)
+  {
+    irPrevState = irCurrentState;
+    irCurrentState = lineDetected();
+    if (!irPrevState && irCurrentState)
+    {
+      linesCounted++;
+      Serial.println(linesCounted);
+    }
+  }
+  stop();
 }

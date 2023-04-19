@@ -1,5 +1,5 @@
 {
     "board": "arduino:avr:uno",
-    "sketch": "drivetrain-calibration\\drivetrain-calibration.ino",
-    "port": "COM7"
+    "sketch": "main\\main.ino",
+    "port": "COM10"
 }
