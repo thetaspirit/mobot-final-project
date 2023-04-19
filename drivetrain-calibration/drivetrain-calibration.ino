@@ -16,15 +16,8 @@ void setup()
 
 void loop()
 {
-    forward(127);
-    // turnLeft();
-    // delay(1000);
-    // turnLeft();
-    // delay(1000);
-    // turnRight();
-    // delay(1000);
-    // turnRight();
-    // delay(1000);
+    delay(1000);
+    turnLeft();
 }
 
 void forward(int speed)
@@ -41,7 +34,7 @@ void stop()
     forward(0);
 }
 
-void turnLeft()
+void turnRight()
 {
     digitalWrite(MOTOR_OUTPUT, HIGH);
     digitalWrite(LEFT_MOTOR_DIR, HIGH);
@@ -49,11 +42,11 @@ void turnLeft()
     analogWrite(LEFT_MOTORS, 127);
     analogWrite(RIGHT_MOTORS, 127);
 
-    delay(525);
+    delay(500);
     stop();
 }
 
-void turnRight()
+void turnLeft()
 {
     digitalWrite(MOTOR_OUTPUT, HIGH);
     digitalWrite(LEFT_MOTOR_DIR, LOW);
@@ -61,6 +54,6 @@ void turnRight()
     analogWrite(LEFT_MOTORS, 127);
     analogWrite(RIGHT_MOTORS, 127);
 
-    delay(575);
+    delay(500);
     stop();
 }
