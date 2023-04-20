@@ -62,23 +62,24 @@ void loop()
   driveUntilLines(numLine);
 
   turnLeft();
-  
+
   forward(64);
   delay(250);
-  
+
   while (getDistance() < 20)
   {
     forward(64);
   }
   stop();
-  
+
   forward(64);
-  delay(500);
+  delay(750);
   stop();
 
   turnRight();
-  
-  while (true) {
+
+  while (true)
+  {
     stop();
   }
 }
