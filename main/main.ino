@@ -73,10 +73,16 @@ void loop()
   stop();
 
   forward(64);
-  delay(750);
+  delay(1250);
   stop();
 
   turnRight();
+
+  backward(64);
+  while (!lineDetected())
+    continue;
+
+  delay(0);
 
   while (true)
   {
@@ -98,6 +104,15 @@ void forward(int speed)
   digitalWrite(MOTOR_OUTPUT, HIGH);
   digitalWrite(LEFT_MOTOR_DIR, HIGH);
   digitalWrite(RIGHT_MOTOR_DIR, HIGH);
+  analogWrite(LEFT_MOTORS, speed);
+  analogWrite(RIGHT_MOTORS, speed);
+}
+
+void backward(int speed)
+{
+  digitalWrite(MOTOR_OUTPUT, HIGH);
+  digitalWrite(LEFT_MOTOR_DIR, LOW);
+  digitalWrite(RIGHT_MOTOR_DIR, LOW);
   analogWrite(LEFT_MOTORS, speed);
   analogWrite(RIGHT_MOTORS, speed);
 }
