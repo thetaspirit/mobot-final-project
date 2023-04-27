@@ -55,23 +55,26 @@ void setup()
 
 void loop()
 {
-  // Serial.print(analogRead(LEFT)); Serial.print(" ");
-  // Serial.print(analogRead(MIDDLE)); Serial.print(" ");
-  // Serial.println(analogRead(RIGHT));
-
-  driveUntilLines(numLine);
-
-  turnLeft();
-
-  forward(64);
-  delay(250);
-
-  while (getDistance() < 25)
+  // Driving forward until the left wall ends.
+  while (true) //(getDistance() < 25)
   {
-    forward(64);
+    // Controller to maintain roughly 10 cm from left wall
+    int deviation = getDistance() - 12;
+
+    if (deviation > 2)
+    { // too far
+      bankLeft(64, 30);
+    }
+    else if (deviation < -2)
+    { // too close
+      bankRight(64, 30);
+    }
+    else
+      forward(64);
   }
   stop();
 
+  // (continue the rest of the course)
   forward(64);
   delay(1250);
   stop();
@@ -106,6 +109,24 @@ void forward(int speed)
   digitalWrite(RIGHT_MOTOR_DIR, HIGH);
   analogWrite(LEFT_MOTORS, speed);
   analogWrite(RIGHT_MOTORS, speed);
+}
+
+void bankRight(int speed, int diff)
+{
+  digitalWrite(MOTOR_OUTPUT, HIGH);
+  digitalWrite(LEFT_MOTOR_DIR, HIGH);
+  digitalWrite(RIGHT_MOTOR_DIR, HIGH);
+  analogWrite(LEFT_MOTORS, speed - diff);
+  analogWrite(RIGHT_MOTORS, speed + diff);
+}
+
+void bankLeft(int speed, int diff)
+{
+  digitalWrite(MOTOR_OUTPUT, HIGH);
+  digitalWrite(LEFT_MOTOR_DIR, HIGH);
+  digitalWrite(RIGHT_MOTOR_DIR, HIGH);
+  analogWrite(LEFT_MOTORS, speed + diff);
+  analogWrite(RIGHT_MOTORS, speed - diff);
 }
 
 void backward(int speed)
@@ -144,6 +165,11 @@ void turnLeft()
 
   delay(500);
   stop();
+}
+
+int getDistance()
+{
+  return (sonar.ping_cm() == 0) ? 30 : sonar.ping_cm();
 }
 
 void driveUntilLines(int lines)
