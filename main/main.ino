@@ -68,7 +68,7 @@ void loop()
 
   while (getDistance() < 25)
   {
-    forward(64);
+    forward(96);
   }
   stop();
 
@@ -76,13 +76,21 @@ void loop()
   delay(1250);
   stop();
 
+  delay(1000); // give time for the wind to turn off???
+
   turnRight();
+
+  reverseLeft(64);
+  delay(750);
 
   backward(64);
   while (!lineDetected())
     continue;
 
-  delay(0);
+  delay(100);
+  stop();
+
+  leverServo.write(190);
 
   while (true)
   {
@@ -135,7 +143,7 @@ void turnRight()
   analogWrite(LEFT_MOTORS, 127);
   analogWrite(RIGHT_MOTORS, 127);
 
-  delay(500);
+  delay(475);
   stop();
 }
 
@@ -149,6 +157,15 @@ void turnLeft()
 
   delay(500);
   stop();
+}
+
+void reverseLeft(int speed)
+{
+  digitalWrite(MOTOR_OUTPUT, HIGH);
+  digitalWrite(LEFT_MOTOR_DIR, LOW);
+  digitalWrite(RIGHT_MOTOR_DIR, LOW);
+  analogWrite(LEFT_MOTORS, speed + 20);
+  analogWrite(RIGHT_MOTORS, speed - 20);
 }
 
 void driveUntilLines(int lines)
@@ -169,11 +186,4 @@ void driveUntilLines(int lines)
     }
   }
   stop();
-}
-
-void actuateLever()
-{
-  leverServo.write(180);
-  delay(500);
-  leverServo.write(90);
 }
