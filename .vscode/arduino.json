@@ -1,5 +1,5 @@
 {
     "board": "arduino:avr:uno",
-    "sketch": "ultrasonic-tracking\\ultrasonic-tracking.ino",
+    "sketch": "main\\main.ino",
     "port": "COM6"
 }

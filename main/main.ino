@@ -28,11 +28,13 @@ const int LEFT = A2;
 const int ECHO = 12;
 const int TRIG = 13;
 
-// Servo Pin
-const int SERVO_PIN = 11;
+// Servo Pins
+const int US_SERVO_PIN = 11;
+const int LEVER_SERVO_PIN = 10;
 
 NewPing sonar(TRIG, ECHO, 30);
-Servo servo;
+Servo usServo;
+Servo leverServo;
 
 void setup()
 {
@@ -46,19 +48,17 @@ void setup()
   pinMode(LEFT_MOTOR_DIR, OUTPUT);
   pinMode(RIGHT_MOTOR_DIR, OUTPUT);
 
-  servo.attach(SERVO_PIN);
+  usServo.attach(US_SERVO_PIN);
+  usServo.write(180);
 
-  servo.write(180);
+  leverServo.attach(LEVER_SERVO_PIN);
+  leverServo.write(90);
 
   Serial.begin(9600);
 }
 
 void loop()
 {
-  // Serial.print(analogRead(LEFT)); Serial.print(" ");
-  // Serial.print(analogRead(MIDDLE)); Serial.print(" ");
-  // Serial.println(analogRead(RIGHT));
-
   driveUntilLines(numLine);
 
   turnLeft();
@@ -88,6 +88,11 @@ void loop()
   {
     stop();
   }
+}
+
+int getDistance()
+{
+  return (sonar.ping_cm() == 0) ? 30 : sonar.ping_cm();
 }
 
 bool lineDetected()
@@ -164,4 +169,11 @@ void driveUntilLines(int lines)
     }
   }
   stop();
+}
+
+void actuateLever()
+{
+  leverServo.write(180);
+  delay(500);
+  leverServo.write(90);
 }
