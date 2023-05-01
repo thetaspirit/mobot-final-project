@@ -63,7 +63,7 @@ void loop()
 
   turnLeft();
 
-  // forward a little bit
+  // forward and to the right a little bit
   forwardRight(64);
   delay(500);
 
