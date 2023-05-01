@@ -63,22 +63,25 @@ void loop()
 
   turnLeft();
 
-  forward(64);
-  delay(250);
+  // forward a little bit
+  forwardRight(64);
+  delay(500);
 
+  // through the wind tunnel
   while (getDistance() < 25)
   {
-    forward(96);
+    forward(64);
   }
   stop();
 
+  // forward some more
   forward(64);
-  delay(1250);
+  delay(500);
   stop();
 
-  delay(1000); // give time for the wind to turn off???
-
   turnRight();
+
+  // move backward toward valve
 
   reverseLeft(64);
   delay(750);
@@ -143,7 +146,7 @@ void turnRight()
   analogWrite(LEFT_MOTORS, 127);
   analogWrite(RIGHT_MOTORS, 127);
 
-  delay(475);
+  delay(425);
   stop();
 }
 
@@ -155,7 +158,7 @@ void turnLeft()
   analogWrite(LEFT_MOTORS, 127);
   analogWrite(RIGHT_MOTORS, 127);
 
-  delay(500);
+  delay(410);
   stop();
 }
 
@@ -166,6 +169,15 @@ void reverseLeft(int speed)
   digitalWrite(RIGHT_MOTOR_DIR, LOW);
   analogWrite(LEFT_MOTORS, speed + 20);
   analogWrite(RIGHT_MOTORS, speed - 20);
+}
+
+void forwardRight(int speed)
+{
+  digitalWrite(MOTOR_OUTPUT, HIGH);
+  digitalWrite(LEFT_MOTOR_DIR, HIGH);
+  digitalWrite(RIGHT_MOTOR_DIR, HIGH);
+  analogWrite(LEFT_MOTORS, speed - 20);
+  analogWrite(RIGHT_MOTORS, speed + 20);
 }
 
 void driveUntilLines(int lines)
